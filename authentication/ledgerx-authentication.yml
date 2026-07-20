@@ -1,0 +1,80 @@
+generated: '2026-07-19'
+method: searched
+source: https://web.archive.org/web/2024/https://docs.ledgerx.com/docs/api-key
+docs: https://docs.miaxdx.com/docs/api-key
+note: >-
+  The live docs host (docs.miaxdx.com, formerly docs.ledgerx.com) currently returns a Cloudflare
+  error 1014 (CNAME Cross-User Banned) to external clients, so this profile was captured from the
+  provider's own archived documentation. No OpenAPI is published, so nothing here is derived from
+  a spec.
+summary:
+  types:
+  - http
+  api_key_in:
+  - header
+  oauth2_flows: []
+schemes:
+- name: JWT API Key
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  in: header
+  header: Authorization
+  value_prefix: 'JWT '
+  example: 'Authorization: JWT ${YOUR_API_KEY}'
+  description: >-
+    The MIAXdx (LedgerX) APIs use JSON Web Token authentication. An API key is required for all
+    private endpoints; public market-data endpoints such as List Contracts and List All Trades may
+    be called unauthenticated.
+  sources:
+  - https://web.archive.org/web/2024/https://docs.ledgerx.com/docs/api-key
+- name: WebSocket token query parameter
+  type: apiKey
+  in: query
+  parameter: token
+  description: >-
+    The WebSocket feed at wss://api.ledgerx.com/ws is authenticated by passing the API key as the
+    token query parameter, which enables account-scoped messages (balance and position changes,
+    and CID/MPID attribution on the caller's own action reports).
+  sources:
+  - https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/connecting
+key_management:
+  console: https://app.ledgerx.com/profile/api-keys
+  create: Log in and use the API Keys page on your profile to create a key with a nickname and expiration.
+  default_expiry_days: 30
+  rotation: Keys expire by default after 30 days and must be rotated to keep connections active.
+  inheritance: All keys are assigned the same roles and permissions as the user who created them.
+roles:
+- name: Trader
+  permissions:
+  - Place orders
+  - Cancel single order
+  - Cancel all orders
+  - Submit exercise instructions
+  - View order, trade and position history
+  - View exercise instructions
+  - Create API Key
+- name: Admin
+  permissions:
+  - Cancel all orders
+  - Submit deposit notice
+  - Submit/Confirm withdrawal request
+  - Manage users and assign roles
+  - View order, trade and position history
+  - View deposit and withdrawal history
+  - View exercise instructions
+  - Create API Key
+  - Add allowlist address
+  - Remove allowlist address
+- name: Auditor
+  permissions:
+  - View order, trade and position history
+  - View deposit and withdrawal history
+  - View exercise instructions
+  - Create API Key
+role_combinations:
+- Trader + Admin (default)
+- Trader
+- Admin
+- Auditor
+roles_source: https://web.archive.org/web/2024/https://docs.ledgerx.com/docs/roles-and-permissions
