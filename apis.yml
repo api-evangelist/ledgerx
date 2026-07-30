@@ -1,9 +1,31 @@
 aid: ledgerx
-name: LedgerX *
-description: 'LedgerX * is a company surfaced as a portfolio company of gv, lightspeed-venture-partners
-  and added to the API Evangelist network as a stub for enrichment. Sector: enterprise. This profile is
-  a lead awaiting the enrichment pipeline.'
+name: LedgerX (MIAX Derivatives Exchange)
+description: 'LedgerX LLC, doing business as MIAX Derivatives Exchange (MIAXdx), is a CFTC-regulated
+  derivatives venue registered as a Designated Contract Market (DCM), Swap Execution Facility (SEF)
+  and Derivatives Clearing Organization (DCO). Founded in 2014 under Ledger Holdings Inc. and backed
+  by GV and Lightspeed Venture Partners, it pioneered physically settled, federally regulated Bitcoin
+  options and swaps for institutional and retail traders. Ledger Holdings was acquired by West Realm
+  Shires (FTX.US) in 2021; after the FTX bankruptcy, Miami International Holdings acquired MIAXdx in
+  May 2023, and in November 2025 MIAX agreed to sell 90% of the exchange to Robinhood Markets in
+  partnership with Susquehanna International Group. The exchange published a public REST API for
+  contracts, positions, trades, balances and order entry, plus a WebSocket market data feed carrying
+  action reports, top-of-book updates and exchange heartbeats, authenticated with JWT API keys. Its
+  physically settled DCM/SEF products were delisted in July 2024 and the public developer surface
+  (docs, api and trade hosts, status page) is currently unreachable or inactive.'
 url: https://raw.githubusercontent.com/api-evangelist/ledgerx/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://app.ledgerx.com/icon-192x192.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -13,11 +35,52 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
 - Enterprise
-apis: []
+- Financial Services
+- Derivatives
+- Trading
+- Cryptocurrency
+- Bitcoin
+- Exchange
+- Market Data
+- WebSockets
+- Regulated Markets
+apis:
+- aid: ledgerx:market-data
+  name: MIAXdx Market Data and Account API
+  description: 'Public and authenticated REST API on api.ledgerx.com covering exchange contracts,
+    traded contracts, contract tickers, positions, trades (own and global), upcoming exchange
+    holidays and account balances. Responses are paginated with offset/limit and a meta navigation
+    object, and endpoints are individually rate limited by IP.'
+  humanURL: https://docs.miaxdx.com/reference/overview
+  baseURL: https://api.ledgerx.com
+  tags:
+  - Market Data
+  - Trading
+  - Derivatives
+  properties:
+  - type: APIReference
+    url: https://docs.miaxdx.com/reference/overview
+  - type: AsyncAPI
+    url: asyncapi/ledgerx-market-data-asyncapi.yml
+- aid: ledgerx:trading
+  name: MIAXdx Trading API
+  description: 'Authenticated order-entry REST API on trade.ledgerx.com for listing resting limit
+    orders, placing orders, cancelling a single order or all orders for an MPID, atomically
+    cancel-replacing an order, and retrieving the current book state for a contract. Orders are
+    tracked by the message id (mid) returned on submission and followed over the WebSocket feed.'
+  humanURL: https://docs.miaxdx.com/reference/open-orders
+  baseURL: https://trade.ledgerx.com
+  tags:
+  - Trading
+  - Order Entry
+  - Derivatives
+  properties:
+  - type: APIReference
+    url: https://docs.miaxdx.com/reference/open-orders
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,4 +88,47 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: http://ledgerx.com
+  url: https://app.ledgerx.com
+- type: Documentation
+  url: https://docs.miaxdx.com
+- type: APIReference
+  url: https://docs.miaxdx.com/reference/overview
+- type: GettingStarted
+  url: https://docs.miaxdx.com/docs/api-key
+- type: Support
+  url: https://support.miaxdx.com/hc/en-us
+- type: SignUp
+  url: https://app.ledgerx.com
+- type: ChangeLog
+  url: https://docs.miaxdx.com/changelog
+- type: ChangeLog
+  url: changelog/ledgerx-changelog.yml
+- type: Authentication
+  url: authentication/ledgerx-authentication.yml
+- type: Conventions
+  url: conventions/ledgerx-conventions.yml
+- type: ErrorCatalog
+  url: errors/ledgerx-error-codes.yml
+- type: RateLimits
+  url: rate-limits/ledgerx-rate-limits.yml
+- type: Lifecycle
+  url: lifecycle/ledgerx-lifecycle.yml
+- type: Conformance
+  url: conformance/ledgerx-conformance.yml
+- type: Compliance
+  url: conformance/ledgerx-conformance.yml
+- type: DataModel
+  url: data-model/ledgerx-data-model.yml
+- type: AsyncAPI
+  url: asyncapi/ledgerx-market-data-asyncapi.yml
+- type: Packages
+  url: packages/ledgerx-packages.yml
+- type: LLMsTxt
+  url: llms/ledgerx-llms.txt
+- type: DomainSecurity
+  url: security/ledgerx-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence
