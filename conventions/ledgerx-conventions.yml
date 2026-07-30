@@ -1,0 +1,120 @@
+generated: '2026-07-19'
+method: searched
+source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/overview
+docs: https://docs.miaxdx.com/reference/overview
+summary: >-
+  MIAXdx (LedgerX) exposes a plain JSON REST API over two hosts plus a WebSocket market data feed.
+  There is no published OpenAPI, no OAuth, and no documented idempotency key; cross-cutting
+  semantics are pagination, per-IP rate limiting, standard HTTP status codes on REST, and a
+  separate numeric action-report status-code vocabulary on the WebSocket feed.
+protocols:
+- rest
+- websocket
+hosts:
+- host: https://api.ledgerx.com
+  role: market data, positions, trades, holidays, balances
+- host: https://trade.ledgerx.com
+  role: order entry and book state
+- host: wss://api.ledgerx.com/ws
+  role: real-time market data and account feed
+authentication:
+  style: 'JWT bearer token in the Authorization header ("Authorization: JWT <key>")'
+  websocket: API key passed as the ?token= query parameter
+  artifact: authentication/ledgerx-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    No idempotency key header or parameter is documented. The closest documented primitive is the
+    atomic cancel-and-replace endpoint (POST /api/orders/{mid}/edit), which atomically swaps a
+    resting limit order, and the message id (mid) returned by order submission, which lets a client
+    correlate an order with subsequent WebSocket fills and cancels. Neither is a request-replay
+    idempotency contract.
+pagination:
+  style: offset
+  applies_to: all "List" endpoints
+  params:
+  - name: offset
+    default: 0
+  - name: limit
+    default: 100
+  response_envelope:
+    data: array of results
+    meta:
+      total_count: integer total matching records
+      next: absolute URL of the next page, or null
+      previous: absolute URL of the previous page, or null
+      limit: integer
+      offset: integer
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/pagination
+error_handling:
+  rest:
+    style: standard HTTP status codes
+    description: 2xx success; 4xx an error with the data provided; 5xx a server-side error.
+  websocket:
+    style: numeric action report status codes with reason sub-codes
+    artifact: errors/ledgerx-error-codes.yml
+  format: json
+  rfc9457: false
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/status-codes
+rate_limiting:
+  scope: ip
+  exceeded_status: 429
+  behavior: time-based blocking of subsequent requests
+  artifact: rate-limits/ledgerx-rate-limits.yml
+versioning:
+  scheme: none
+  note: >-
+    No version segment or version header is documented; paths are namespaced by domain
+    (/trading, /funds on api.ledgerx.com; /api on trade.ledgerx.com).
+  artifact: lifecycle/ledgerx-lifecycle.yml
+request_tracing:
+  request_id_header: null
+  correlation: >-
+    Order lifecycle correlation uses the message id (mid) returned by POST /api/orders, which is
+    echoed on all subsequent fill and cancel action reports over the WebSocket feed.
+streaming_semantics:
+  monotonic_clock:
+    field: clock
+    description: >-
+      A monotonically incrementing per-contract counter on action reports, book top and book state
+      messages. Clients track it to detect a missed state mutation; an action report should only be
+      applied when its clock equals current_clock + 1.
+    increments:
+    - event: limit order inserted into the book
+      status_code: 200
+      increment: 1
+    - event: order filled partially or fully
+      status_code: 201
+      increment: 1
+    - event: order canceled
+      status_code: 203
+      increment: 1
+    - event: order canceled and replaced
+      status_code: 204
+      increment: 1
+    source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/monotonic-clock
+  heartbeats:
+    interval_seconds: 1
+    run_id: >-
+      Increments on each exchange restart; a change means all volatile open orders were canceled
+      unconditionally and local book state must be rebuilt.
+    source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/heartbeats
+  keepalive:
+    mechanism: RFC 6455 WebSocket ping/pong
+    server_ping_seconds: 8
+    disconnect_after_seconds: 32
+    guidance: >-
+      Clients should expect occasional disconnects and implement reconnection logic; redundant
+      WebSocket connections are the recommended mitigation.
+    source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/connecting
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+cross_links:
+  authentication: authentication/ledgerx-authentication.yml
+  errors: errors/ledgerx-error-codes.yml
+  lifecycle: lifecycle/ledgerx-lifecycle.yml
+  rate_limits: rate-limits/ledgerx-rate-limits.yml
+  data_model: data-model/ledgerx-data-model.yml
+  asyncapi: asyncapi/ledgerx-market-data-asyncapi.yml

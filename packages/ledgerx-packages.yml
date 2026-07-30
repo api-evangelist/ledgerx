@@ -1,0 +1,85 @@
+generated: '2026-07-19'
+method: searched
+source: https://pypi.org/pypi/ledgerx/json
+summary: >-
+  No first-party MIAXdx (LedgerX) client library was found on npm, PyPI, Maven Central, NuGet,
+  pkg.go.dev, RubyGems, Packagist or crates.io, and the archived developer documentation offered
+  only inline shell/Node/Ruby/PHP/Python request snippets rather than an SDK. Every package below
+  is a third-party community client, so no SDKs pointer is wired in apis.yml.
+registries_checked:
+- registry: pypi
+  result: community packages only
+- registry: npm
+  result: community packages only
+- registry: maven-central
+  result: none found
+- registry: nuget
+  result: none found
+- registry: pkg.go.dev
+  result: none found
+- registry: rubygems
+  result: none found
+- registry: packagist
+  result: none found
+- registry: crates.io
+  result: none found
+official_sdks: []
+packages:
+- language: python
+  registry: pypi
+  name: ledgerx
+  version: 0.0.3
+  url: https://pypi.org/project/ledgerx/
+  install: pip install ledgerx
+  repository: https://github.com/westonplatter/ledgerx-python
+  author: Weston Platter
+  license: BSD-3-Clause
+  official: false
+  status: unmaintained
+  note: Author labels the codebase alpha state; last release 2021.
+- language: javascript
+  registry: npm
+  name: ledgerx-rest
+  version: 3.1.0
+  url: https://www.npmjs.com/package/ledgerx-rest
+  install: npm install ledgerx-rest
+  author: Andrew Baine
+  license: MIT
+  official: false
+  status: unmaintained
+- language: javascript
+  registry: npm
+  name: simple-ledgerx-api
+  version: 0.3.0
+  url: https://www.npmjs.com/package/simple-ledgerx-api
+  install: npm install simple-ledgerx-api
+  description: Convert simplified API requests into objects usable by request, fetch, or axios.
+  author: Andrew Baine
+  license: MIT
+  official: false
+  status: unmaintained
+- language: javascript
+  registry: npm
+  name: ledgerx-redux
+  version: 0.2.1
+  url: https://www.npmjs.com/package/ledgerx-redux
+  install: npm install ledgerx-redux
+  author: Andrew Baine
+  license: MIT
+  official: false
+  status: unmaintained
+- language: javascript
+  registry: npm
+  name: ledgerx-rest-getall
+  version: 1.0.0
+  url: https://www.npmjs.com/package/ledgerx-rest-getall
+  install: npm install ledgerx-rest-getall
+  author: Andrew Baine
+  license: MIT
+  official: false
+  status: unmaintained
+examples:
+- name: LedgerPrimeX/ledgerx
+  url: https://github.com/LedgerPrimeX/ledgerx
+  description: Example Python trading API code to quote on LedgerX.
+  official: false

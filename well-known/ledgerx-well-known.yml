@@ -1,0 +1,75 @@
+generated: '2026-07-19'
+method: searched
+source: live probe
+probed: '2026-07-19'
+summary: >-
+  No .well-known discovery documents are published. ledgerx.com returns 404 for every path,
+  api.ledgerx.com returns Cloudflare 530 (origin unreachable), trade.ledgerx.com does not respond,
+  and app.ledgerx.com answers every path with a soft-200 single-page-app HTML shell rather than a
+  real document. Nothing was saved as a raw file and no WellKnown or SecurityTxt pointer is wired
+  in apis.yml, because no discovery document actually exists.
+hosts:
+- host: https://ledgerx.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://app.ledgerx.com
+  note: >-
+    Vite single-page app with a catch-all route; all paths return HTTP 200 with text/html
+    (the app shell). These are soft-200s, not well-known documents.
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    content_type: text/html
+    valid_document: false
+  - path: /.well-known/openid-configuration
+    status: 200
+    content_type: text/html
+    valid_document: false
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    content_type: text/html
+    valid_document: false
+  - path: /.well-known/api-catalog
+    status: 200
+    content_type: text/html
+    valid_document: false
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    content_type: text/html
+    valid_document: false
+- host: https://api.ledgerx.com
+  note: Cloudflare 530, origin unreachable.
+  documents:
+  - path: /.well-known/security.txt
+    status: 530
+  - path: /.well-known/openid-configuration
+    status: 530
+  - path: /.well-known/oauth-authorization-server
+    status: 530
+  - path: /.well-known/api-catalog
+    status: 530
+  - path: /.well-known/ai-plugin.json
+    status: 530
+- host: https://trade.ledgerx.com
+  note: Connection failed; host did not respond.
+  documents:
+  - path: /.well-known/security.txt
+    status: null
+  - path: /.well-known/openid-configuration
+    status: null
+  - path: /.well-known/oauth-authorization-server
+    status: null
+  - path: /.well-known/api-catalog
+    status: null
+  - path: /.well-known/ai-plugin.json
+    status: null
+documents_saved: []

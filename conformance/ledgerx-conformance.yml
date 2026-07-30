@@ -1,0 +1,60 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.cftc.gov/sites/default/files/filings/orgrules/25/02/rules02172515624.pdf
+summary: >-
+  LedgerX LLC d/b/a MIAX Derivatives Exchange is a federally regulated US derivatives venue; its
+  compliance posture is regulatory (CFTC registration and rulebooks filed with the Commission)
+  rather than the SOC 2 / ISO 27001 style trust-center posture common to SaaS API providers. No
+  trust center, no security.txt and no published certification list were found. Technical
+  conformance is thin: no OpenAPI, no OAuth, no RFC 9457.
+regulatory:
+- id: cftc-dcm
+  name: CFTC Designated Contract Market
+  conforms: true
+  evidence: LedgerX LLC d/b/a MIAX Derivatives Exchange rulebooks filed with the CFTC.
+  source: https://www.cftc.gov/sites/default/files/filings/orgrules/25/12/rules12222535167.pdf
+- id: cftc-sef
+  name: CFTC Swap Execution Facility
+  conforms: true
+  evidence: LEDGERX LLC d/b/a MIAX DERIVATIVES EXCHANGE Swap Execution Facility Rules filed with the CFTC.
+  source: https://www.cftc.gov/sites/default/files/filings/orgrules/25/02/rules02172515624.pdf
+- id: cftc-trade-reporting
+  name: CFTC trade reporting
+  conforms: true
+  evidence: 'API overview states: "All trades are reported to the Commodity Futures Trading Commission."'
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/overview
+standards:
+- id: jwt-rfc7519
+  conforms: true
+  evidence: 'API keys are JSON Web Tokens presented as "Authorization: JWT <key>".'
+- id: websocket-rfc6455
+  conforms: true
+  evidence: WebSocket feed at wss://api.ledgerx.com/ws using RFC 6455 control-frame ping/pong keepalive.
+- id: oauth2
+  conforms: false
+  evidence: No OAuth flows, authorization server or scopes are documented; auth is a static JWT API key.
+- id: oidc
+  conforms: false
+- id: openapi
+  conforms: false
+  evidence: No OpenAPI or Swagger definition is published for either host.
+- id: asyncapi
+  conforms: false
+  evidence: No AsyncAPI is published; the event surface was derived from the documented message field tables.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use standard HTTP status codes plus a proprietary numeric action-report status-code registry.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header support is documented.
+- id: pagination
+  conforms: true
+  evidence: All list endpoints support offset/limit query params with a meta navigation object.
+- id: idempotency
+  conforms: false
+  evidence: No idempotency key header or parameter is documented.
+- id: rate-limiting
+  conforms: true
+  evidence: Per-IP rate limits documented per endpoint with 429 on exceed.
+certifications: []
+trust_center: null

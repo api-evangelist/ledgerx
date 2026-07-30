@@ -1,0 +1,44 @@
+generated: '2026-07-19'
+method: searched
+source: https://web.archive.org/web/2024/https://docs.ledgerx.com/changelog
+docs: https://docs.miaxdx.com/changelog
+scheme: dated-entries
+note: >-
+  The provider ran a ReadMe-hosted changelog that labelled entries with relative dates only
+  ("8 months ago") rather than absolute dates, and the live host is currently unreachable
+  (Cloudflare 1014). Relative labels are recorded verbatim as published; absolute dates are left
+  null rather than inferred. This is the recent window captured from the archived page, not a
+  full history.
+current_version: null
+versioning: unversioned (no version segment or header documented)
+entries:
+- title: Added /trading/holidays endpoint
+  kind: added
+  breaking: false
+  date: null
+  published_relative: 8 months ago
+  author: Will Bradley
+- title: Removed is_volatile parameter from /orders
+  kind: removed
+  breaking: true
+  date: null
+  published_relative: 8 months ago
+  author: Will Bradley
+- title: Remove CBTC from REST responses
+  kind: removed
+  breaking: true
+  date: null
+  published_relative: over 1 year ago
+  author: Jaad Coles
+- title: Balances API
+  kind: added
+  breaking: false
+  date: null
+  published_relative: almost 2 years ago
+  author: Jaad Coles
+- title: order_locked and fee_locked balances deprecated
+  kind: deprecated
+  breaking: false
+  date: null
+  published_relative: about 2 years ago
+  author: Jaad Coles

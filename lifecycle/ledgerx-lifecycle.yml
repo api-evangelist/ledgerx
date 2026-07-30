@@ -1,0 +1,83 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.miaxdx.com/changelog
+summary: >-
+  The MIAXdx (LedgerX) public API surface is effectively dormant. The documentation host, the REST
+  API host and the order-entry host are all unreachable to external clients as of this probe, and
+  the exchange's status page has been marked inactive by Statuspage. The exchange delisted its
+  physically settled DCM and SEF products in July 2024, and in November 2025 Miami International
+  Holdings agreed to sell 90% of MIAXdx to Robinhood Markets in partnership with Susquehanna
+  International Group.
+versioning:
+  scheme: none
+  current: null
+  note: No version segment or version header is documented; paths are namespaced by domain.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No published deprecation policy and no RFC 8594 Sunset/Deprecation header support was found.
+    Deprecations were announced only as changelog entries (e.g. order_locked and fee_locked
+    balances deprecated; is_volatile parameter removed from /orders).
+  changelog: changelog/ledgerx-changelog.yml
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: https://status.ledgerx.com
+  active: false
+  probed: '2026-07-19'
+  probe_result: 200 redirecting to https://ledgerx.statuspage.io/inactive
+  note: >-
+    The Statuspage page resolves but has been deactivated, so no operational status is published.
+    No StatusPage pointer is wired in apis.yml because no live status page exists.
+host_probes:
+- host: https://ledgerx.com
+  status: 404
+  probed: '2026-07-19'
+- host: https://app.ledgerx.com
+  status: 200
+  probed: '2026-07-19'
+  note: Web trading interface single-page app; still serving.
+- host: https://api.ledgerx.com
+  status: 530
+  probed: '2026-07-19'
+  note: Cloudflare 530 (origin unreachable).
+- host: https://trade.ledgerx.com
+  status: null
+  probed: '2026-07-19'
+  note: Connection failed; host did not respond.
+- host: https://docs.miaxdx.com
+  status: 403
+  probed: '2026-07-19'
+  note: Cloudflare error 1014, CNAME Cross-User Banned. docs.ledgerx.com redirects here.
+- host: https://data.ledgerx.com
+  status: 200
+  probed: '2026-07-19'
+- host: https://support.miaxdx.com
+  status: 403
+  probed: '2026-07-19'
+  note: Zendesk help center; 403 to non-browser clients.
+- host: https://www.miaxdx.com
+  status: 404
+  probed: '2026-07-19'
+corporate_timeline:
+- date: '2014'
+  event: MIAXdx organized as a wholly owned subsidiary of Ledger Holdings Inc. (LedgerX LLC).
+  source: https://www.sec.gov/Archives/edgar/data/1438472/000162828025035343/miamiinternationalholdings.htm
+- date: '2021'
+  event: Ledger Holdings acquired by West Realm Shires (parent of FTX.US).
+  source: https://www.sec.gov/Archives/edgar/data/1438472/000162828025035343/miamiinternationalholdings.htm
+- date: '2022-11'
+  event: FTX files for bankruptcy.
+  source: https://www.sec.gov/Archives/edgar/data/1438472/000162828025035343/miamiinternationalholdings.htm
+- date: '2023-05-19'
+  event: Miami International Holdings acquires 100% of MIAXdx; LedgerX LLC does business as MIAX Derivatives Exchange.
+  source: https://www.sec.gov/Archives/edgar/data/1438472/000162828025035343/miamiinternationalholdings.htm
+- date: '2024-07'
+  event: All physically settled products delisted from the DCM and SEF; cash-settled binary options remain on the DCM.
+  source: https://www.sec.gov/Archives/edgar/data/1438472/000162828025035343/miamiinternationalholdings.htm
+- date: '2025-11'
+  event: MIAX agrees to sell 90% of MIAXdx to Robinhood Markets in partnership with Susquehanna International Group, retaining 10%.
+  source: https://www.sec.gov/Archives/edgar/data/1438472/000143847225000016/miaxsaleofmiaxdxtorobinh.htm
+deprecated_operations: []

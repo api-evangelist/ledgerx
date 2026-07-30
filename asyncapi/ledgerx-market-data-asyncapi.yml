@@ -1,0 +1,222 @@
+asyncapi: 3.0.0
+info:
+  title: MIAXdx (LedgerX) Market Data Feed
+  version: '1.0.0'
+  description: |
+    WebSocket market data and account feed for MIAX Derivatives Exchange (LedgerX).
+
+    NOT A PROVIDER-PUBLISHED SPEC. MIAXdx publishes no AsyncAPI document. This description was
+    derived by API Evangelist from the provider's own published message field tables on the
+    Connecting, Market Data Feed, Top of Book Feed, Server Heartbeats and Monotonic Clock
+    reference pages. Every field and description below is taken from those pages; nothing was
+    invented. Fields the provider did not document are absent rather than guessed.
+
+    Provenance: generated 2026-07-19, method derived, source
+    https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/market-data-feed
+  contact:
+    name: MIAXdx Customer Support
+    url: https://support.miaxdx.com/hc/en-us
+  externalDocs:
+    url: https://docs.miaxdx.com/reference/connecting
+servers:
+  production:
+    host: api.ledgerx.com
+    pathname: /ws
+    protocol: wss
+    description: >-
+      Upgrade an HTTPS connection to WebSockets. Pass ?token=YOUR_API_KEY for authenticated
+      messages such as account balance and position changes. Pass ?presence=true to indicate
+      availability for chat messages and negotiated trades. Rate limited to 10 requests per minute.
+      The server sends a ping every 8 seconds and severs the connection if no pong is received
+      within 32 seconds (RFC 6455 control frames).
+    security:
+    - $ref: '#/components/securitySchemes/apiKeyToken'
+channels:
+  feed:
+    address: /ws
+    title: Market data and account feed
+    description: >-
+      Single multiplexed WebSocket channel. Message type is carried in the type field. Since the
+      feed contains all action reports, a client receives both its own initial action reports and
+      subsequent fills against its resting limit orders.
+    messages:
+      actionReport:
+        $ref: '#/components/messages/actionReport'
+      bookTop:
+        $ref: '#/components/messages/bookTop'
+      heartbeat:
+        $ref: '#/components/messages/heartbeat'
+operations:
+  receiveFeed:
+    action: receive
+    channel:
+      $ref: '#/channels/feed'
+    summary: Receive streamed orders, trades, cancels, top-of-book changes and exchange heartbeats.
+    messages:
+    - $ref: '#/channels/feed/messages/actionReport'
+    - $ref: '#/channels/feed/messages/bookTop'
+    - $ref: '#/channels/feed/messages/heartbeat'
+components:
+  securitySchemes:
+    apiKeyToken:
+      type: httpApiKey
+      name: token
+      in: query
+      description: >-
+        JWT API key passed as the token query parameter. On an authenticated connection,
+        action_report messages describing the account holder's own orders carry the CID and MPID
+        fields; those fields are absent on other participants' orders and on unauthenticated
+        connections.
+  messages:
+    actionReport:
+      name: action_report
+      title: Action Report
+      summary: >-
+        Describes activity on the market, such as fills, cancels and limit order insertions onto
+        the Central Limit Order Book. Status codes are catalogued in errors/ledgerx-error-codes.yml.
+      payload:
+        $ref: '#/components/schemas/ActionReport'
+    bookTop:
+      name: book_top
+      title: Top of Book
+      summary: >-
+        Dispatched for a contract every time the best price on that contract changes.
+      payload:
+        $ref: '#/components/schemas/BookTop'
+    heartbeat:
+      name: heartbeat
+      title: Server Heartbeat
+      summary: >-
+        Sent roughly once per second. Indicates the exchange is running and, if any contracts are
+        active, whether those markets are open for trading.
+      payload:
+        $ref: '#/components/schemas/Heartbeat'
+  schemas:
+    ActionReport:
+      type: object
+      properties:
+        type:
+          type: string
+          const: action_report
+        contract_id:
+          type: integer
+          description: The ID of the contract this order is for
+        open_interest:
+          type: integer
+          description: The open interest on the contract this order is for
+        mid:
+          type: string
+          description: The order message ID
+        order_type:
+          type: string
+          description: customer_limit_order
+        price:
+          type: integer
+          description: The current price of this order
+        size:
+          type: integer
+          description: The current size of this order
+        inserted_price:
+          type: integer
+          description: The inserted price of this order
+        inserted_size:
+          type: integer
+          description: The inserted size of this order
+        filled_price:
+          type: integer
+          description: The filled price of this order
+        filled_size:
+          type: integer
+          description: The filled size of this order
+        original_price:
+          type: integer
+          description: The original price of a canceled or filled order
+        original_size:
+          type: integer
+          description: The original size of a canceled or filled order
+        vwap:
+          type: integer
+          description: Volume-weighted average price this order has been filled at
+        is_ask:
+          type: boolean
+          description: Whether this order is an ask (true) or a bid (false)
+        clock:
+          type: integer
+          description: >-
+            Per-contract monotonically incrementing counter. Apply an action report only when its
+            clock equals current_clock + 1; handle gaps by refetching book state.
+        cid:
+          type: integer
+          description: >-
+            Customer ID. Present only on the connected trader's organization's orders over an
+            authenticated connection.
+        mpid:
+          type: string
+          description: >-
+            Market Participant ID. Action reports without mpid set can safely be ignored when
+            tracking your own fills.
+    BookTop:
+      type: object
+      properties:
+        type:
+          type: string
+          const: book_top
+        contract_id:
+          type: integer
+          description: The contract ID this message describes
+        ask:
+          type: integer
+          description: The lowest ask for this contract
+        ask_size:
+          type: integer
+          description: The size of the top ask
+        bid:
+          type: integer
+          description: The highest bid for this contract
+        bid_size:
+          type: integer
+          description: The size of the top bid
+        clock:
+          type: integer
+          description: >-
+            The current clock for the entire contract. This is not the original clock of this
+            order's insert.
+    Heartbeat:
+      type: object
+      properties:
+        type:
+          type: string
+          const: heartbeat
+          description: websocket message type
+        timestamp:
+          type: integer
+          description: nanoseconds since Unix epoch UTC
+        ticks:
+          type: integer
+          description: monotonic clock value
+        run_id:
+          type: integer
+          description: >-
+            Time at which the exchange was last hard-restarted, in nanoseconds since Unix epoch
+            UTC. A change means all volatile open orders were canceled unconditionally.
+        interval_ms:
+          type: integer
+          description: The server heartbeat interval, in milliseconds
+        exchange_next_open_ts:
+          type: integer
+          description: The next timestamp upon which the exchange will open
+        exchange_next_close_ts:
+          type: integer
+          description: The next timestamp upon which the exchange will close
+        is_exchange_open:
+          type: boolean
+          description: Tells whether the exchange is accepting orders and executing trades
+      examples:
+      - type: heartbeat
+        is_exchange_open: true
+        interval_ms: 1000
+        run_id: 1705674614858326580
+        ticks: 34474404
+        exchange_next_open_ts: 1706020200000000000
+        exchange_next_close_ts: 1705957200000000000
+        timestamp: 1705939663000000000

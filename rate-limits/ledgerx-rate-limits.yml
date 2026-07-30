@@ -1,0 +1,93 @@
+generated: '2026-07-19'
+method: searched
+source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/rate-limits
+docs: https://docs.miaxdx.com/reference/rate-limits
+policy:
+  scope: ip
+  description: >-
+    Some endpoints are rate limited. Surpassing the set limits returns HTTP 429 and triggers a
+    time-based block of subsequent requests. Rate limits are applied per IP address.
+  exceeded_status: 429
+  headers_documented: false
+rate_limits:
+- endpoint: GET /trading/contracts
+  host: api.ledgerx.com
+  limits:
+  - count: 50
+    per: minute
+  - count: 200
+    per: 10 minutes
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/listcontracts
+- endpoint: GET /trading/contracts/{id}/ticker
+  host: api.ledgerx.com
+  limits:
+  - count: 10
+    per: minute
+  note: For real-time updates use the WebSocket market data feed instead.
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/contractticker
+- endpoint: GET /trading/positions
+  host: api.ledgerx.com
+  limits:
+  - count: 20
+    per: minute
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/listpositions
+- endpoint: GET /trading/trades
+  host: api.ledgerx.com
+  limits:
+  - count: 20
+    per: minute
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/listtrades
+- endpoint: GET /trading/trades/global
+  host: api.ledgerx.com
+  limits:
+  - count: 60
+    per: minute
+  - count: 100
+    per: 10 minutes
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/globalstrade
+- endpoint: GET /trading/holidays
+  host: api.ledgerx.com
+  limits:
+  - count: 10
+    per: minute
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/holidays-1
+- endpoint: GET wss://api.ledgerx.com/ws
+  host: api.ledgerx.com
+  limits:
+  - count: 10
+    per: minute
+  note: Applies to WebSocket connection attempts.
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/connecting
+- endpoint: POST /api/orders
+  host: trade.ledgerx.com
+  limits:
+  - count: 200
+    per: minute
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/create-order
+- endpoint: DELETE /api/orders/{mid}
+  host: trade.ledgerx.com
+  limits:
+  - count: 100
+    per: 10 seconds
+  - count: 200
+    per: minute
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/cancel-single
+- endpoint: POST /api/orders/{mid}/edit
+  host: trade.ledgerx.com
+  limits:
+  - count: 150
+    per: 10 seconds
+  - count: 200
+    per: minute
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/cancel-replace
+- endpoint: GET /api/book-states/{contract_id}
+  host: trade.ledgerx.com
+  limits:
+  - count: 500
+    per: minute
+  - count: 3000
+    per: 10 minutes
+  note: >-
+    Recommended pattern is to combine book-state calls with WebSocket action_report listeners
+    rather than refreshing full state.
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/book-state-contract

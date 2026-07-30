@@ -1,0 +1,154 @@
+generated: '2026-07-19'
+method: searched
+source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/overview
+docs: https://docs.miaxdx.com/reference/overview
+note: >-
+  No OpenAPI is published, so this entity graph was read off the documented endpoint surface and
+  the WebSocket message field tables rather than derived from schema $refs. Only entities and
+  reference fields that appear in the published documentation are recorded; response schemas the
+  docs did not enumerate are left empty rather than guessed.
+entities:
+- name: Contract
+  description: A tradable exchange contract (option or swap) on the MIAXdx central limit order book.
+  id_field: id
+  endpoints:
+  - GET https://api.ledgerx.com/trading/contracts
+  - GET https://api.ledgerx.com/trading/contracts/traded
+  - GET https://api.ledgerx.com/trading/contracts/{id}
+  - GET https://api.ledgerx.com/trading/contracts/{id}/ticker
+  - GET https://api.ledgerx.com/trading/contracts/{id}/position
+  relationships:
+  - type: has_many
+    target: Order
+    via: contract_id
+  - type: has_many
+    target: Trade
+    via: contract_id
+  - type: has_one
+    target: Position
+    via: contract id path segment
+  - type: has_one
+    target: BookState
+    via: contract_id
+- name: Position
+  description: The caller's net position in a contract, with the trades that make it up.
+  id_field: id
+  endpoints:
+  - GET https://api.ledgerx.com/trading/positions
+  - GET https://api.ledgerx.com/trading/positions/{id}/trades
+  relationships:
+  - type: belongs_to
+    target: Contract
+  - type: has_many
+    target: Trade
+    via: position id path segment
+- name: Trade
+  description: An executed cross on the exchange; available scoped to the caller or market-wide.
+  endpoints:
+  - GET https://api.ledgerx.com/trading/trades
+  - GET https://api.ledgerx.com/trading/trades/global
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: belongs_to
+    target: Position
+- name: Order
+  description: >-
+    A resting or transient order. Identified by the message id (mid) returned on submission, which
+    is echoed on every subsequent action_report for that order.
+  id_field: mid
+  endpoints:
+  - GET https://trade.ledgerx.com/api/open-orders
+  - POST https://trade.ledgerx.com/api/orders
+  - DELETE https://trade.ledgerx.com/api/orders
+  - DELETE https://trade.ledgerx.com/api/orders/{mid}
+  - POST https://trade.ledgerx.com/api/orders/{mid}/edit
+  fields:
+  - mid
+  - contract_id
+  - order_type
+  - price
+  - size
+  - inserted_price
+  - inserted_size
+  - filled_price
+  - filled_size
+  - original_price
+  - original_size
+  - vwap
+  - is_ask
+  - open_interest
+  - clock
+  - cid
+  - mpid
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: belongs_to
+    target: MarketParticipant
+    via: mpid
+  - type: has_many
+    target: ActionReport
+    via: mid
+- name: BookState
+  description: The current full book depth snapshot for a contract, rebuilt in real time from action reports.
+  endpoints:
+  - GET https://trade.ledgerx.com/api/book-states/{contract_id}
+  relationships:
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+  - type: has_many
+    target: Order
+    via: mid
+- name: ActionReport
+  description: >-
+    WebSocket event describing market activity (insert, fill, cancel, cancel-replace) carrying a
+    numeric status_code and the per-contract monotonic clock.
+  transport: wss://api.ledgerx.com/ws
+  relationships:
+  - type: belongs_to
+    target: Order
+    via: mid
+  - type: belongs_to
+    target: Contract
+    via: contract_id
+- name: Account
+  description: One account per asset (such as USD or BTC), each carrying multiple balances.
+  endpoints:
+  - GET https://api.ledgerx.com/funds/balances
+  relationships:
+  - type: has_many
+    target: Balance
+- name: Balance
+  description: >-
+    A balance on an account, such as the available balance or the position-locked balance. The
+    order_locked and fee_locked balances were deprecated per the changelog.
+  relationships:
+  - type: belongs_to
+    target: Account
+- name: Transaction
+  description: A ledger movement against an asset account.
+  endpoints:
+  - GET https://api.ledgerx.com/trading/transactions
+  relationships:
+  - type: belongs_to
+    target: Account
+- name: Holiday
+  description: An upcoming exchange holiday on which the market is closed.
+  endpoints:
+  - GET https://api.ledgerx.com/trading/holidays
+- name: MarketParticipant
+  description: >-
+    A trading organization identified by MPID, containing individual traders identified by CID.
+    Cancel-all operates across the whole MPID.
+  id_fields:
+  - mpid
+  - cid
+  relationships:
+  - type: has_many
+    target: Order
+    via: mpid
+render: null

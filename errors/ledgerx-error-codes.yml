@@ -1,0 +1,90 @@
+generated: '2026-07-19'
+method: searched
+source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/action-report-status-codes
+docs: https://docs.miaxdx.com/reference/action-report-status-codes
+format: proprietary-numeric
+note: >-
+  MIAXdx (LedgerX) publishes no RFC 9457 problem types and no OpenAPI. REST endpoints use standard
+  HTTP status codes (2xx success, 4xx client data error, 5xx server error). The exchange's real
+  error/outcome vocabulary lives on the WebSocket action_report message as a numeric status_code
+  with optional reason sub-codes; that registry is captured below.
+rest:
+  style: standard-http
+  classes:
+  - status: 2xx
+    meaning: Successful
+  - status: 4xx
+    meaning: There was an error with the data provided
+  - status: 429
+    meaning: Rate limit exceeded; subsequent requests are blocked for a period
+  - status: 5xx
+    meaning: Server-side error at the exchange
+  source: https://web.archive.org/web/2024/https://docs.ledgerx.com/reference/status-codes
+envelope:
+  transport: websocket action_report message
+  field: status_code
+  reason_field: status_reason
+status_codes:
+- code: 200
+  meaning: A resting limit order was inserted
+  outcome: success
+- code: 201
+  meaning: A cross (trade) occurred
+  outcome: success
+  reason_codes:
+  - code: 52
+    meaning: Full fill
+  note: >-
+    Two action report instances with status_code 201 are sent for each two-sided trade.
+- code: 202
+  meaning: A market order was not filled
+  outcome: rejected
+- code: 203
+  meaning: An order was successfully canceled
+  outcome: success
+  reason_codes:
+  - code: 53
+    meaning: Canceled by the exchange
+- code: 204
+  meaning: An order was successfully canceled and replaced
+  outcome: success
+- code: 300
+  meaning: Message acknowledged (returns a ticket ID called mid to track subsequent replies)
+  outcome: acknowledgement
+- code: 600
+  meaning: Contract not found
+  outcome: error
+  action: Verify the contract_id against GET /trading/contracts.
+- code: 601
+  meaning: Order ID (mid) not found
+  outcome: error
+  action: The order may already be filled or canceled; re-check open orders.
+- code: 602
+  meaning: Invalid order ID (mid)
+  outcome: error
+  action: Send the mid exactly as returned by the order submission response.
+- code: 607
+  meaning: Order rejected
+  outcome: error
+- code: 609
+  meaning: Insufficient collateral
+  outcome: error
+  action: Check account balances before resubmitting.
+- code: 610
+  meaning: Contract expired
+  outcome: error
+- code: 613
+  meaning: Price threshold exceeded
+  outcome: error
+- code: 614
+  meaning: Contract not active
+  outcome: error
+- code: 616
+  meaning: Invalid block size (block trades)
+  outcome: error
+- code: 801
+  meaning: Exchange is closed
+  outcome: error
+  action: >-
+    Check is_exchange_open on the heartbeat message and the exchange_next_open_ts timestamp
+    before retrying.

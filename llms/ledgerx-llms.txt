@@ -1,0 +1,69 @@
+# LedgerX (MIAX Derivatives Exchange)
+
+> LedgerX LLC, doing business as MIAX Derivatives Exchange (MIAXdx), is a CFTC-regulated US derivatives venue registered as a Designated Contract Market, Swap Execution Facility and Derivatives Clearing Organization. It published a JSON REST API for contracts, positions, trades, holidays and balances, a separate order-entry API, and a WebSocket market data feed, all authenticated with JWT API keys.
+
+Provenance: generated 2026-07-19 by the API Evangelist enrichment pipeline from apis.yml and the artifacts in this repo. The provider publishes no llms.txt.
+
+Status: the public developer surface is dormant. docs.miaxdx.com returns a Cloudflare 1014 error, api.ledgerx.com returns 530, trade.ledgerx.com does not respond, and the Statuspage at status.ledgerx.com has been deactivated. Physically settled DCM/SEF products were delisted in July 2024; in November 2025 MIAX agreed to sell 90% of MIAXdx to Robinhood Markets with Susquehanna International Group. Documentation captured in this repo came from the provider's own archived pages.
+
+## APIs
+
+- [MIAXdx Market Data and Account API](https://docs.miaxdx.com/reference/overview): REST API at https://api.ledgerx.com for contracts, traded contracts, contract tickers, positions, trades (own and global), exchange holidays and account balances.
+- [MIAXdx Trading API](https://docs.miaxdx.com/reference/open-orders): REST order entry at https://trade.ledgerx.com for open orders, order placement, single and bulk cancel, atomic cancel-replace, and book state.
+- [MIAXdx Market Data Feed](https://docs.miaxdx.com/reference/connecting): WebSocket feed at wss://api.ledgerx.com/ws carrying action reports, top-of-book updates and exchange heartbeats.
+
+## Endpoints
+
+- GET https://api.ledgerx.com/trading/contracts — List contracts
+- GET https://api.ledgerx.com/trading/contracts/traded — List traded contracts
+- GET https://api.ledgerx.com/trading/contracts/{id} — Retrieve contract
+- GET https://api.ledgerx.com/trading/contracts/{id}/ticker — Contract ticker (best bid/ask, 24h volume, last trade)
+- GET https://api.ledgerx.com/trading/contracts/{id}/position — Retrieve position for contract
+- GET https://api.ledgerx.com/trading/positions — List positions
+- GET https://api.ledgerx.com/trading/positions/{id}/trades — List trades for position
+- GET https://api.ledgerx.com/trading/trades — List your trades
+- GET https://api.ledgerx.com/trading/trades/global — List all trades in the market
+- GET https://api.ledgerx.com/trading/holidays — List upcoming exchange holidays
+- GET https://api.ledgerx.com/funds/balances — Get account balances
+- GET https://trade.ledgerx.com/api/open-orders — List open orders
+- POST https://trade.ledgerx.com/api/orders — Create order (returns mid)
+- DELETE https://trade.ledgerx.com/api/orders — Cancel all orders for the MPID
+- DELETE https://trade.ledgerx.com/api/orders/{mid} — Cancel single order
+- POST https://trade.ledgerx.com/api/orders/{mid}/edit — Cancel and replace order atomically
+- GET https://trade.ledgerx.com/api/book-states/{contract_id} — Retrieve book state for contract
+
+## Conventions
+
+- Authentication: `Authorization: JWT <api_key>` on REST; `?token=<api_key>` on the WebSocket. Keys are created at https://app.ledgerx.com/profile/api-keys and expire after 30 days by default.
+- Pagination: `offset` (default 0) and `limit` (default 100) on all list endpoints, with a `meta` object carrying `total_count`, `next`, `previous`, `limit` and `offset`.
+- Rate limits: per IP, per endpoint, returning HTTP 429 plus a time-based block.
+- Errors: standard HTTP status codes on REST; a numeric `status_code` registry (200/201/202/203/204/300, 600-616, 801) on WebSocket action reports.
+- Idempotency: not supported. Order correlation uses the `mid` returned on submission.
+- Ordering integrity: a per-contract monotonic `clock` field; apply an action report only when `clock == current_clock + 1`.
+- Versioning: none. No Sunset or Deprecation header support.
+
+## Artifacts
+
+- [apis.yml](apis.yml): APIs.json catalog entry
+- [authentication/ledgerx-authentication.yml](authentication/ledgerx-authentication.yml): JWT API key profile, key lifecycle, roles and permissions
+- [conventions/ledgerx-conventions.yml](conventions/ledgerx-conventions.yml): pagination, rate limiting, errors, streaming semantics
+- [errors/ledgerx-error-codes.yml](errors/ledgerx-error-codes.yml): action report status and reason codes
+- [rate-limits/ledgerx-rate-limits.yml](rate-limits/ledgerx-rate-limits.yml): per-endpoint published limits
+- [asyncapi/ledgerx-market-data-asyncapi.yml](asyncapi/ledgerx-market-data-asyncapi.yml): AsyncAPI 3.0.0 derived from the published message field tables
+- [data-model/ledgerx-data-model.yml](data-model/ledgerx-data-model.yml): entity graph
+- [changelog/ledgerx-changelog.yml](changelog/ledgerx-changelog.yml): recent changelog window
+- [lifecycle/ledgerx-lifecycle.yml](lifecycle/ledgerx-lifecycle.yml): host probes, status page state, corporate timeline
+- [conformance/ledgerx-conformance.yml](conformance/ledgerx-conformance.yml): CFTC registration and technical standards conformance
+- [packages/ledgerx-packages.yml](packages/ledgerx-packages.yml): third-party client libraries (no first-party SDK)
+- [well-known/ledgerx-well-known.yml](well-known/ledgerx-well-known.yml): .well-known probe results (none published)
+- [security/ledgerx-domain-security.yml](security/ledgerx-domain-security.yml): TLS, HSTS, DNSSEC, CAA, SPF, DMARC probe
+
+## Docs
+
+- [Documentation](https://docs.miaxdx.com)
+- [API Reference](https://docs.miaxdx.com/reference/overview)
+- [API Keys guide](https://docs.miaxdx.com/docs/api-key)
+- [Roles and Permissions](https://docs.miaxdx.com/docs/roles-and-permissions)
+- [Changelog](https://docs.miaxdx.com/changelog)
+- [Customer Support](https://support.miaxdx.com/hc/en-us)
+- [Web trading interface](https://app.ledgerx.com)
