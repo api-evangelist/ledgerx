@@ -13,6 +13,17 @@ description: 'LedgerX LLC, doing business as MIAX Derivatives Exchange (MIAXdx),
   physically settled DCM/SEF products were delisted in July 2024 and the public developer surface
   (docs, api and trade hosts, status page) is currently unreachable or inactive.'
 url: https://raw.githubusercontent.com/api-evangelist/ledgerx/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: unknown
   onboarding: self-serve
