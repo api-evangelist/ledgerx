@@ -49,10 +49,13 @@ x-tier-reason: portfolio-lead
 specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-07-19'
+x-docs-platform: readme
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-10-03
 tags:
 - Company
 - Enterprise
-- Financial-Services
+- Financial Services
 - Derivatives
 - Trading
 - Cryptocurrency
@@ -61,6 +64,7 @@ tags:
 - Market Data
 - WebSocket
 - Regulated Markets
+- Real-Time
 tags_raw:
 - Company
 - Enterprise
@@ -73,6 +77,8 @@ tags_raw:
 - Market Data
 - WebSockets
 - Regulated Markets
+- Financial-Services
+- Real-Time
 apis:
 - aid: ledgerx:market-data
   name: MIAXdx Market Data and Account API
