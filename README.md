@@ -64,16 +64,109 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-LedgerX LLC, doing business as MIAX Derivatives Exchange (MIAXdx), is a CFTC-regulated US derivatives venue registered as a Designated Contract Market (DCM), Swap Execution Facility (SEF) and Derivatives Clearing Organization (DCO). Founded in 2014 under Ledger Holdings Inc. and backed by GV and Lightspeed Venture Partners, it pioneered physically settled, federally regulated Bitcoin options and swaps.
+LedgerX LLC, doing business as MIAX Derivatives Exchange (MIAXdx), is a CFTC-regulated derivatives venue registered as a Designated Contract Market (DCM), Swap Execution Facility (SEF) and Derivatives Clearing Organization (DCO). Founded in 2014 under Ledger Holdings Inc. and backed by GV and Lightspeed Venture Partners, it pioneered physically settled, federally regulated Bitcoin options and swaps for institutional and retail traders. Ledger Holdings was acquired by West Realm Shires (FTX.US) in 2021; after the FTX bankruptcy, Miami International Holdings acquired MIAXdx in May 2023, and in November 2025 MIAX agreed to sell 90% of the exchange to Robinhood Markets in partnership with Susquehanna International Group. The exchange published a public REST API for contracts, positions, trades, balances and order entry, plus a WebSocket market data feed carrying action reports, top-of-book updates and exchange heartbeats, authenticated with JWT API keys. Its physically settled DCM/SEF products were delisted in July 2024 and the public developer surface (docs, api and trade hosts, status page) is currently unreachable or inactive.
 
-It published a JSON REST API for contracts, positions, trades, holidays and balances (`api.ledgerx.com`), a separate order-entry API (`trade.ledgerx.com`), and a WebSocket market data feed (`wss://api.ledgerx.com/ws`), all authenticated with JWT API keys.
+**Areas:** Company · Enterprise · Financial Services · Derivatives · Trading · Cryptocurrency · Bitcoin · Exchange · Market Data · WebSocket · Regulated Markets · Real-Time
 
-## Status
+## LedgerX (MIAX Derivatives Exchange) on APIs.io
 
-The public developer surface is dormant as of 2026-07-19: `docs.miaxdx.com` returns a Cloudflare 1014 error, `api.ledgerx.com` returns 530, `trade.ledgerx.com` does not respond, and the status page has been deactivated. Physically settled DCM/SEF products were delisted in July 2024, and in November 2025 Miami International Holdings agreed to sell 90% of MIAXdx to Robinhood Markets in partnership with Susquehanna International Group. The documentation captured in this repo came from the provider's own archived pages; see `lifecycle/ledgerx-lifecycle.yml` for the full probe record and corporate timeline.
+Everything profiled for LedgerX (MIAX Derivatives Exchange) is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/ledgerx/](https://apis.io/providers/ledgerx/)** — or go straight to one of the APIs or properties below.
 
-- Web trading interface — https://app.ledgerx.com
-- Documentation — https://docs.miaxdx.com
-- Support — https://support.miaxdx.com/hc/en-us
+### APIs (2)
 
-Backed by: gv, lightspeed-venture-partners
+- [MIAXdx Market Data and Account API](https://apis.io/apis/ledgerx/market-data/) — Public and authenticated REST API on api.ledgerx.com covering exchange contracts, traded contracts, contract tickers, positions, trades (own and global),…
+- [MIAXdx Trading API](https://apis.io/apis/ledgerx/trading/) — Authenticated order-entry REST API on trade.ledgerx.com for listing resting limit orders, placing orders, cancelling a single order or all orders for an…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [MIAXdx (LedgerX) Market Data Feed](https://apis.io/asyncapis/ledgerx/ledgerx-market-data-asyncapi/)
+
+#### Event channels (1)
+
+Individual events and webhooks the provider emits.
+
+- [/ws](https://apis.io/channels/ledgerx/ws/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Ledgerx Authentication](https://apis.io/security/ledgerx/ledgerx-authentication/)
+- [Ledgerx Domain Security](https://apis.io/security/ledgerx/ledgerx-domain-security/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Ledgerx Rate Limits](https://apis.io/rate-limits/ledgerx/ledgerx-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://app.ledgerx.com)
+- [Documentation](https://docs.miaxdx.com)
+- [Getting started](https://docs.miaxdx.com/docs/api-key)
+- [API reference](https://docs.miaxdx.com/reference/overview)
+- [Sign up](https://app.ledgerx.com)
+- [Support](https://support.miaxdx.com/hc/en-us)
+- [Changelog](https://docs.miaxdx.com/changelog)
+
+## API Evangelist rating
+
+**Kin Score 32.8** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 42.7 |
+| Contract governance | 18.2 |
+| Operational transparency | 15.8 |
+| Developer ergonomics | 45.2 |
+| Access clarity | 7.9 |
+
+**Agent readiness 21.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 20.4** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/ledgerx/](https://apis.io/providers/ledgerx/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for LedgerX (MIAX Derivatives Exchange): the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/ledgerx/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
